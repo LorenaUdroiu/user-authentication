@@ -2,15 +2,32 @@ package com.lu.user.authentication.exceptions;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 @Slf4j
 @RestControllerAdvice
 public class ExceptionHandler  extends ResponseEntityExceptionHandler {
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(UserAuthenticationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorDetails> userAuthenticationHandler(HttpServletRequest request, UserAuthenticationException ex) {
+        if (logger.isErrorEnabled()) {
+            logger.error(ex.getMessage());
+        }
+
+        ErrorDetails errorDetails = new ErrorDetails(new Date(),
+                ex.getStatus().value(),
+                ex.getStatus().getReasonPhrase(),
+                ex.getMessage());
+
+        return ResponseEntity.status(ex.getStatus()).body(errorDetails);
+    }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
