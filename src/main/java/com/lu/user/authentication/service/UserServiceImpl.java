@@ -6,6 +6,9 @@ import com.lu.user.authentication.model.User;
 import com.lu.user.authentication.repository.AddressRepository;
 import com.lu.user.authentication.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.OffsetDateTime;
+import java.util.Base64;
 import java.util.List;
 
 import static com.lu.user.authentication.model.UserState.ACTIVE;
@@ -61,6 +65,36 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll(Sort.by("username"));
     }
 
+    @Override
+    public Pair getUserNameAndPassword(String authHeader) throws UserAuthenticationException {
+
+        if(StringUtils.isEmpty(authHeader)) {
+            log.error("Missing authentication header");
+            throw new UserAuthenticationException("Missing authentication header", HttpStatus.UNAUTHORIZED);
+        }
+
+        String[] encodedValues = authHeader.split(BASIC_AUTHENTICATION_DELIMITER);
+        if(encodedValues == null || encodedValues.length < 2) {
+            log.error("Missing authentication data");
+            throw new UserAuthenticationException("Missing authentication data", HttpStatus.UNAUTHORIZED);
+        }
+
+        String encodedUsernameAndPassword = encodedValues[1];
+        if(encodedUsernameAndPassword.endsWith(",")) {
+            encodedUsernameAndPassword = encodedUsernameAndPassword.substring(0, encodedUsernameAndPassword.length() - 1).trim();
+        }
+
+        byte[] decodedUsernameAndPassword = Base64.getDecoder().decode(encodedUsernameAndPassword);
+        String[] usernameAndPasswordValues = new String(decodedUsernameAndPassword).split(USERNAME_PASSWORD_DELIMITER);
+        if(usernameAndPasswordValues == null || usernameAndPasswordValues.length < 2) {
+            log.error("Bad authentication header");
+            throw new UserAuthenticationException("Wrong authentication header", HttpStatus.UNAUTHORIZED);
+        }
+
+        Pair<String, String> usernameAndPassword = new ImmutablePair<>(usernameAndPasswordValues[0], usernameAndPasswordValues[1]);
+
+        return usernameAndPassword;
+    }
 
     @Override
     @Transactional
@@ -90,5 +124,14 @@ public class UserServiceImpl implements UserService {
         user.setFailedLogins(failedLogins);
         user.setUpdateDate(OffsetDateTime.now());
         return userRepository.save(user);
+    }
+
+    @Override
+    public void login(User user, String password) throws UserAuthenticationException{
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            log.error("Authentication failed. Bad credentials.");
+            saveLoginFailed(user.getUsername());
+            throw new UserAuthenticationException("Authentication failed. Bad credentials.", HttpStatus.UNAUTHORIZED);
+        }
     }
 }

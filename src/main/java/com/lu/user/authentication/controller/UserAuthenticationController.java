@@ -6,7 +6,9 @@ import com.lu.user.authentication.model.User;
 import com.lu.user.authentication.model.pojo.Users;
 import com.lu.user.authentication.service.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +17,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import javax.validation.Valid;
 import javax.ws.rs.FormParam;
-import java.security.Principal;
 import java.util.List;
 
 @Slf4j
@@ -42,12 +43,8 @@ public class UserAuthenticationController {
 
     @PostMapping(path = "/login", consumes = "application/json", produces = "application/json")
     public ResponseEntity login(HttpServletRequest request, HttpServletResponse response) throws UserAuthenticationException {
-        Principal principal = request.getUserPrincipal();
-        if (principal != null) {
-            log.error("Authentication failed.", principal.getName());
-            throw new UserAuthenticationException("Authentication failed.", HttpStatus.UNAUTHORIZED);
-        }
-        String loginUsername = principal.getName();
+        Pair<String, String> usernameAndPassword = userService.getUserNameAndPassword(request.getHeader(HttpHeaders.AUTHORIZATION));
+        String loginUsername = usernameAndPassword.getLeft();
         log.info("Perform user {} login", loginUsername);
         User user = userService.getUser(loginUsername);
 
@@ -59,6 +56,7 @@ public class UserAuthenticationController {
         switch (user.getState()) {
             case ACTIVE:
                 log.info("User {} s is active", loginUsername);
+                userService.login(user, usernameAndPassword.getRight());
                 userService.saveLoginSuccess(loginUsername);
                 log.info("User {} was successfully authenticated", loginUsername);
                 return ResponseEntity.noContent().build();

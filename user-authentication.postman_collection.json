@@ -1,0 +1,251 @@
+{
+	"info": {
+		"_postman_id": "5b40aa7d-f5ba-45e8-8f75-713273549e4a",
+		"name": "user-authentication",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "user login",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "test1234",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "lorena.danciu@yahoo.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://localhost:8080/ing/user/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"ing",
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user logout",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "test1234",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "lorena.danciu@yahoo.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://localhost:8080/ing/user/logout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"ing",
+						"user",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register user",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "test1234",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "lorena.danciu@yahoo.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"test.danciu@yahoo.com\",\r\n    \"password\": \"myTestPassword123$\",\r\n    \"firstName\": \"Lorena\",\r\n    \"lastName\": \"Udroiu\",\r\n    \"birthDate\": null,\r\n    \"address\": {\r\n        \"city\": \"Bucharest\",\r\n        \"zipCode\": \"100510\",\r\n        \"state\": \"Bucharest\",\r\n        \"country\": \"Romania\",\r\n        \"street\": \"Mihai Viteazul\",\r\n        \"houseNumber\": \"5\"\r\n    },\r\n    \"createDate\": null,\r\n    \"updateDate\": null,\r\n    \"failedLogins\": null,\r\n    \"lastLogin\": null,\r\n    \"state\": null\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/ing/user/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"ing",
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "userDetails",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "test1234",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "lorena.danciu@yahoo.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://localhost:8080/ing/user/userDetails?username=lorena.danciu@yahoo.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"ing",
+						"user",
+						"userDetails"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "lorena.danciu@yahoo.com"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "all users",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "test1234",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "lorena.danciu@yahoo.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://localhost:8080/ing/user/allUsers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"ing",
+						"user",
+						"allUsers"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

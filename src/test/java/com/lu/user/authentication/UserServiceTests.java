@@ -1,11 +1,13 @@
 package com.lu.user.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lu.user.authentication.exceptions.UserAuthenticationException;
 import com.lu.user.authentication.model.User;
 import com.lu.user.authentication.model.UserState;
 import com.lu.user.authentication.repository.AddressRepository;
 import com.lu.user.authentication.repository.UserRepository;
 import com.lu.user.authentication.service.UserServiceImpl;
+import org.hamcrest.core.StringStartsWith;
 import org.junit.Rule;
 import org.junit.jupiter.api.Test;
 import org.junit.rules.ExpectedException;
@@ -44,8 +46,38 @@ public class UserServiceTests {
     @MockBean
     private UserRepository userRepository;
 
-    @Rule
-    public ExpectedException exceptionRule = ExpectedException.none();
+//    @Test
+//    void getUserNameAndPasswordTest() throws Exception {
+//        when(userRepository.findByUsername(any())).thenReturn(mockUser());
+//
+//        Pair<String, String> usernameAndPassword = userService.getUserNameAndPassword("Basic bG9yZW5hLmRhbmNpdUB5YWhvby5jb206dGVzdDEyMzQ=");
+//        assertNotNull(usernameAndPassword.getLeft());
+//        assertNotNull(usernameAndPassword.getRight());
+//        assertThat("lorena.danciu@yahoo.com").isEqualTo(usernameAndPassword.getLeft());
+//        assertThat("test1234").isEqualTo(usernameAndPassword.getRight());
+//    }
+
+    @Test
+    void loginTest_BadCredentials() throws Exception {
+        when(userRepository.findByUsername(any())).thenReturn(mockUser());
+        try {
+            userService.login(mockUser(), "test12345");
+        }
+        catch (UserAuthenticationException ex) {
+            assertThat(ex.getMessage()).startsWith("Authentication failed. Bad credentials.");
+        }
+    }
+
+    @Test
+    void loginTest() throws Exception {
+        when(userRepository.findByUsername(any())).thenReturn(mockUser());
+        try {
+            userService.login(mockUser(), "test1234");
+            assert(true);
+        } catch (Exception ex) {
+           assert(false);
+        }
+    }
 
     @Test
     void saveLoginSuccessTest() throws Exception {
