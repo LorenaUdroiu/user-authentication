@@ -1,5 +1,6 @@
 package com.lu.user.authentication.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
@@ -8,10 +9,10 @@ import javax.persistence.*;
 @Table(name = "USER_ADDRESS")
 public class Address {
     @Id
-    @SequenceGenerator(name = "user_address_seq", sequenceName = "user_address_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_address_seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private int id;
+    @JsonIgnore
+    private Long id;
 
     @Column(name = "CITY")
     @JsonProperty(required = true)
@@ -39,6 +40,14 @@ public class Address {
 
     public String getCity() {
         return city;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setCity(String city) {

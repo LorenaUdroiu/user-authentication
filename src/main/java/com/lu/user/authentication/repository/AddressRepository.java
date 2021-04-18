@@ -1,10 +1,9 @@
 package com.lu.user.authentication.repository;
 
-import com.lu.user.authentication.model.User;
+import com.lu.user.authentication.model.Address;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-    User findByUsername(String username);
+public interface AddressRepository extends JpaRepository<Address, Long> {
 }

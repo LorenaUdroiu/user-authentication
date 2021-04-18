@@ -1,8 +1,10 @@
 package com.lu.user.authentication.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 import java.util.Date;
@@ -11,14 +13,16 @@ import java.util.Date;
 @Table(name = "USER")
 public class User {
     @Id
-    @SequenceGenerator(name = "user_seq", sequenceName = "user_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private int id;
+    @JsonIgnore
+    private Long id;
 
     //user credentials
+    //username in the email address format
     @Column(name = "USERNAME")
     @NotNull
+    @Email(message = "Username should be a valid email")
     @JsonProperty(required = true)
     private String username;
 
@@ -29,10 +33,12 @@ public class User {
 
     //user details
     @Column(name = "FIRSTNAME")
+    @NotNull
     @JsonProperty(required = true)
     private String firstName;
 
     @Column(name = "LASTNAME")
+    @NotNull
     @JsonProperty(required = true)
     private String lastName;
 
@@ -67,11 +73,11 @@ public class User {
     @JsonProperty
     private UserState state;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

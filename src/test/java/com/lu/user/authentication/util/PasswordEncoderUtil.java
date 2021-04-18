@@ -1,4 +1,4 @@
-package com.lu.user.authentication;
+package com.lu.user.authentication.util;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 

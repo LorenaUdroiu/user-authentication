@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class UserAuthenticationException extends Exception {
+public class UserException extends Exception {
     protected String message;
     protected HttpStatus status;
     //FIXME add error code
