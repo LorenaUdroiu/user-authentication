@@ -55,8 +55,8 @@ public class UserAuthenticationController {
 
         switch (user.getState()) {
             case ACTIVE:
-                log.info("User {} s is active", loginUsername);
-                userService.login(user, usernameAndPassword.getRight());
+                log.info("User {} is active", loginUsername);
+                //userService.login(user, usernameAndPassword.getRight());
                 userService.saveLoginSuccess(loginUsername);
                 log.info("User {} was successfully authenticated", loginUsername);
                 return ResponseEntity.noContent().build();
