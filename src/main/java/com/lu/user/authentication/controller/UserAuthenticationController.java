@@ -43,7 +43,7 @@ public class UserAuthenticationController {
     @PostMapping(path = "/login", consumes = "application/json", produces = "application/json")
     public ResponseEntity login(HttpServletRequest request, HttpServletResponse response) throws UserAuthenticationException {
         Principal principal = request.getUserPrincipal();
-        if (principal == null) {
+        if (principal != null) {
             log.error("Authentication failed.", principal.getName());
             throw new UserAuthenticationException("Authentication failed.", HttpStatus.UNAUTHORIZED);
         }
